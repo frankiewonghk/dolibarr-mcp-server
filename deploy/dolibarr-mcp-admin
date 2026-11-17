@@ -1,0 +1,12 @@
+#!/bin/sh
+# Admin commands for a systemd installation (run as root), e.g.:
+#   dolibarr-mcp-admin token list
+#   dolibarr-mcp-admin token create --label "nightly report" --scope read
+#   dolibarr-mcp-admin audit 100
+# Loads the service settings and runs as the service user.
+set -eu
+set -a
+. /etc/dolibarr-mcp/env
+set +a
+cd /opt/dolibarr-mcp-server
+exec runuser -u dolibarr-mcp -- /usr/bin/node --disable-warning=ExperimentalWarning dist/index.js "$@"

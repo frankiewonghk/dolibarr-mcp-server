@@ -1,0 +1,48 @@
+{
+  "name": "dolibarr-mcp-server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) server for Dolibarr ERP & CRM: lets AI assistants work with third parties, products, sales, invoices, purchasing, stock, manufacturing, projects, tickets and the agenda through the Dolibarr REST API.",
+  "keywords": [
+    "dolibarr",
+    "mcp",
+    "model-context-protocol",
+    "erp",
+    "crm",
+    "ai",
+    "llm",
+    "claude"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "bin": {
+    "dolibarr-mcp-server": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx --env-file-if-exists=.env src/index.ts",
+    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "express": "^5.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}

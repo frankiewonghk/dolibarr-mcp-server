@@ -1,0 +1,39 @@
+# systemd unit for dolibarr-mcp-server in HTTP mode.
+# Install: cp deploy/dolibarr-mcp.service /etc/systemd/system/ && systemctl daemon-reload
+[Unit]
+Description=Dolibarr MCP server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dolibarr-mcp
+Group=dolibarr-mcp
+WorkingDirectory=/opt/dolibarr-mcp-server
+EnvironmentFile=/etc/dolibarr-mcp/env
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning dist/index.js http
+Restart=on-failure
+RestartSec=3
+
+# The only place the service may write: /var/lib/dolibarr-mcp
+StateDirectory=dolibarr-mcp
+StateDirectoryMode=0700
+
+# Hardening: keep the service away from the rest of the machine.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
