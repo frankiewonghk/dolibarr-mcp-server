@@ -126,6 +126,29 @@ complete production setup (systemd, nginx or Apache, Docker) and
 [docs/administration.md](docs/administration.md) for managing tokens and the
 audit log.
 
+## Dolibarr module
+
+The server is also packaged as a standard Dolibarr module, `dolibarrmcpserver`,
+for installation from DoliStore or through *Home → Setup → Modules →
+Deploy/install external module* (Dolibarr 20 or later). Enabling the module:
+
+- enables Dolibarr's **API REST** module, which the server needs;
+- adds a setup page that checks the instance (REST API enabled, API key on
+  your user card) and gives installation instructions with the correct
+  `DOLIBARR_URL` and a ready-made Claude Desktop configuration.
+
+The MCP server itself is bundled in the module's `mcp-server` folder. It is
+not served by the web server: copy it outside the web root, run
+`npm ci --omit=dev`, and continue with the [quick start](#quick-start-local-stdio)
+or [remote server](#remote-server-http-with-oauth) instructions above.
+
+To build the package (`module_dolibarrmcpserver-<version>.zip`) from the
+committed sources:
+
+```bash
+dolibarr-module/build.sh [output-dir]
+```
+
 ## Configuration
 
 All settings are environment variables. In local use they can also be placed
@@ -264,6 +287,7 @@ src/dolibarr/           REST client, transport, sign-in, response shaping
 src/tools/              one file per toolset, plus shared helpers
 test/                   vitest suites
 deploy/                 systemd unit, reverse proxy examples, admin wrapper
+dolibarr-module/        Dolibarr module wrapper and its build script
 ```
 
 To add a tool, register it in the matching file under `src/tools/` with
