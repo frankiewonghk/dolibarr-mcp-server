@@ -1,0 +1,26 @@
+# Language file for module DolibarrMcpServer
+# Copyright (C) 2026 LH Wong
+
+CHARSET=UTF-8
+
+Module207510Name=Dolibarr MCP Server
+Module207510Desc=Connect AI assistants such as Claude to Dolibarr through the Model Context Protocol (MCP)
+
+DolibarrMcpServerSetup=Dolibarr MCP Server setup
+DolibarrMcpServerIntro=Dolibarr MCP Server is a small Node.js server that runs next to Dolibarr. It lets AI assistants such as Claude look up and work with your Dolibarr data through the REST API. Every call uses the connected user's own API key, so Dolibarr permissions apply exactly as in the web interface. Irreversible steps (validating, deleting, payments, stock movements) always need explicit confirmation.
+DolibarrMcpServerChecks=Checks
+DolibarrMcpServerApiModule=REST API module
+DolibarrMcpServerDolibarrUrl=Value for DOLIBARR_URL
+DolibarrMcpServerBundledServer=Bundled server files
+DolibarrMcpServerUserApiKey=API key on your user card
+DolibarrMcpServerEnabled=Enabled
+DolibarrMcpServerNotEnabled=Not enabled
+DolibarrMcpServerPresent=Present
+DolibarrMcpServerMissing=Missing
+DolibarrMcpServerInstall=Installation
+DolibarrMcpServerInstallStep1=Install Node.js 22.13 or later on the machine that will run the server.
+DolibarrMcpServerInstallStep2=Copy the bundled server folder outside the web root (for example to /opt/dolibarr-mcp-server) and install its dependencies:
+DolibarrMcpServerInstallStep3=Each user needs a Dolibarr API key (user card, API key field).
+DolibarrMcpServerInstallStep4=Add the server to your MCP client. Example for Claude Desktop (claude_desktop_config.json):
+DolibarrMcpServerTeam=For a shared server with OAuth sign-in (HTTP mode), deployment with systemd, nginx, Apache or Docker, and administration, see README.md and the docs folder in the bundled server.
+DolibarrMcpServerDocs=Full documentation
