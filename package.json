@@ -1,6 +1,6 @@
 {
   "name": "dolibarr-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Model Context Protocol (MCP) server for Dolibarr ERP & CRM: lets AI assistants work with third parties, products, sales, invoices, purchasing, stock, manufacturing, projects, tickets and the agenda through the Dolibarr REST API.",
   "keywords": [
     "dolibarr",

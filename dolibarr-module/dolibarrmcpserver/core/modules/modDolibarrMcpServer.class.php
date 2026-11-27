@@ -40,7 +40,7 @@ class modDolibarrMcpServer extends DolibarrModules
 		$this->descriptionlong = "Bundles the Dolibarr MCP Server, a Node.js server that lets AI assistants work with Dolibarr data through the REST API, and adds a setup page with installation instructions for this instance.";
 		$this->editor_name = 'LH Wong';
 		$this->editor_url = 'https://github.com/frankiewonghk/dolibarr-mcp-server';
-		$this->version = '1.0.0';
+		$this->version = '1.0.1';
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		$this->picto = 'technic';
 
