@@ -50,6 +50,17 @@ describe("DolibarrClient", () => {
     expect(error.toAgentText()).toContain("POST /stockmovements");
   });
 
+  it("keeps Dolibarr's error details, which say why", async () => {
+    const { client } = clientWith({
+      status: 500,
+      body: '{"error":{"code":500,"message":"Internal Server Error: Error creating thirdparty","0":"","1":"ErrorCustomerCodeRequired","2":"Name is wrong","3":["Name is wrong"]}}',
+    });
+    const error = await client.post("/thirdparties", { name: "X" }).catch((e) => e);
+    expect(error.message).toBe(
+      "Internal Server Error: Error creating thirdparty: Customer code required (ErrorCustomerCodeRequired); Name is wrong",
+    );
+  });
+
   it("copes with an error page that is not JSON", async () => {
     const { client } = clientWith({
       status: 500,

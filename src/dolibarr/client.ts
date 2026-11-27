@@ -167,15 +167,51 @@ function errorCode(payload: unknown): number | null {
   return Number.isInteger(code) && code >= 300 && code < 600 ? code : null;
 }
 
-/** Dolibarr errors look like {"error":{"code":403,"message":"Forbidden: ..."}}. */
+/**
+ * Dolibarr errors look like {"error":{"code":403,"message":"Forbidden: ..."}}.
+ * Many routes add the object's own errors as details, which Restler merges
+ * into "error" under numbered keys: {"error":{"code":500,"message":"Internal
+ * Server Error: Error creating thirdparty","0":"","1":"ErrorCustomerCodeRequired"}}.
+ * Those details are the real reason, so they are kept.
+ */
 function errorMessage(payload: unknown, raw: string, status: number): string {
   if (payload && typeof payload === "object" && "error" in payload) {
-    const error = (payload as { error?: { message?: unknown } }).error;
-    if (error && typeof error.message === "string" && error.message !== "") {
-      return cleanMessage(error.message);
+    const error = (payload as { error?: Record<string, unknown> }).error;
+    if (error && typeof error === "object") {
+      const main = typeof error.message === "string" ? cleanMessage(error.message) : "";
+      const details = errorDetails(
+        Object.entries(error)
+          .filter(([key]) => key !== "code" && key !== "message")
+          .map(([, value]) => value),
+      ).filter((detail) => detail !== "" && !main.includes(detail));
+      const unique = [...new Set(details)];
+      if (main !== "" || unique.length > 0) {
+        return unique.length > 0 ? `${main !== "" ? `${main}: ` : ""}${unique.join("; ")}` : main;
+      }
     }
   }
   if (status === 304) return "Nothing to do";
   const snippet = cleanMessage(raw).slice(0, 300);
   return snippet !== "" ? snippet : `Dolibarr error ${status}`;
+}
+
+/** Flatten error details (strings, or arrays of them) into readable lines. */
+function errorDetails(values: unknown[]): string[] {
+  const out: string[] = [];
+  for (const value of values) {
+    if (typeof value === "string") out.push(readableKey(cleanMessage(value)));
+    else if (Array.isArray(value)) out.push(...errorDetails(value));
+  }
+  return out;
+}
+
+/**
+ * Objects often report an untranslated language key such as
+ * "ErrorCustomerCodeRequired". Spell it out, keeping the key for searching.
+ */
+function readableKey(text: string): string {
+  const key = /^Error([A-Z][A-Za-z0-9]*)$/.exec(text);
+  if (!key) return text;
+  const words = key[1]!.replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase();
+  return `${words.charAt(0).toUpperCase()}${words.slice(1)} (${text})`;
 }
